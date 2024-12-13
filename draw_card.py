@@ -50,37 +50,27 @@ def draw_card_known(deck_from, deck_to, other_decks=0, *cards):
 	*cards -- *int : the cards that has been drawn
 
 	"""
-	print(size_of(deck_from))
-	
 	for card in cards:
 		if (size_of(deck_from) < 1.0):
-			print(size_of(deck_from))
-			print(deck_from)
-			print("Not enough cards in deck to draw a card.")
+			print(f"Not enough cards in deck {deck_from} to draw a card.")
 			return
-		proba_from = deck_from[card] # 0.1
-		print("probba_from = ", proba_from)
-		percent_to_rem = (1 - proba_from) #/ (0.9)
-		size_from = size_of(deck_from)
-		current_size_from = size_from - proba_from #2 - 0.1 = 1.9
-		for i, card_proba in enumerate(deck_from):
-			deck_from[i] = round(card_proba - percent_to_rem * card_proba / current_size_from, 5)
-		if isinstance(other_decks, list):
-			for deck in other_decks:
-				for i, card_proba in enumerate(deck):
-					deck_from[i] = round(card_proba - percent_to_rem * card_proba / current_size_from, 5)
+		proba_from = deck_from[card] # 0.6
+		proba_to = deck_to[card] # 0.4
 		deck_from[card] = 0.0
-
-		print("deck to before:", deck_to)
-		proba_to = deck_to[card]
-		percent_to_add = 1 - proba_to
-		print("percent to add:", percent_to_add)
-		size_to = size_of(deck_to)
-		current_size_to = size_to + proba_to
-		print("current_size_to:", current_size_to)
+		deck_to[card] = 1.0
+		to_del_from = 1 - proba_from # 0.4
+		to_add_to = proba_to # 0.6
+		size_from = size_of(deck_from)
+		empty_to = sum([1 - c for c in deck_to])
 		for i, card_proba in enumerate(deck_to):
-			# deck_to[i] = round(card_proba + percent_to_add * (1 - card_proba) / (len(deck_to) - current_size_to - 1), 5)
 			if i == card:
 				continue
-			deck_to[i] += percent_to_add * (deck_to[i]) # TODO
-		deck_to[card] = 1.0
+			deck_to[i] = round(card_proba + to_add_to * (1 - card_proba) / empty_to, 5)
+			deck_from[i] = round(deck_from[i] - to_add_to * deck_from[i] / empty_to, 5)
+		if isinstance(other_decks, list): # TODO TEST & DEBUG
+			for deck in other_decks:
+				deck[card] = 0.0
+				proba_deck = deck[card]
+				empty_deck = sum([1 - c for c in deck])
+				for i, card_proba in enumerate(deck):
+					deck[i] = round(card_proba + proba_deck * (1 - card_proba) / empty_deck, 5)

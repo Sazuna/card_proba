@@ -25,8 +25,6 @@ def test_known_1():
 	deck1 = [0.4, 0.4, 0.2]
 	deck2 = [0.6, 0.6, 0.8]
 	draw_card_known(deck1, deck2, 0, 1)
-	print(deck1, deck2)
-	print("deck2 = ", deck2)
 	assert(deck1 == [0.0, 0.0, 0.0])
 	assert(deck2 == [1.0, 1.0, 1.0])
 
@@ -34,9 +32,15 @@ def test_known_2():
 	deck1 = [0.1, 0.1, 0.1, 0.4, 0.6, 0.7]
 	deck2 = [0.9, 0.9, 0.9, 0.6, 0.4, 0.3]
 	draw_card_known(deck1, deck2, 0, 4, 3)
-	print(deck1)
-	print(deck2)
-	print(size_of(deck1) == 0)
+	assert(deck1 == [0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+	assert(deck2 == [1.0, 1.0, 1.0, 1.0, 1.0, 1.0])
+
+def test_known_3():
+	deck1 = [0.5, 0.9, 0.6]
+	deck2 = [0.5, 0.1, 0.4]
+	draw_card_known(deck1, deck2, 0, 2)
+	assert(deck1[2] == 0.0)
+	assert(deck2[2] == 1.0)
 
 def test_data():
 	deck1 = [0.1, 0.1, 0.1, 0.4, 0.6, 0.7]
@@ -44,9 +48,10 @@ def test_data():
 	data_is_correct([deck1, deck2])
 	
 if __name__ == '__main__':
-	# test0()
-	#test1()
-	#test2()
+	test0()
+	test1()
+	test2()
 	test_known_1()
 	test_known_2()
-	# test_data()
+	test_known_3()
+	test_data()
